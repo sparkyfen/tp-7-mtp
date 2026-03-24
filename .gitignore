@@ -10,3 +10,4 @@ libusb_shim.dylib
 FieldKit_local
 FieldKit_local.app/
 .DS_Store
+.venv/

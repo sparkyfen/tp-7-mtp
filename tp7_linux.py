@@ -279,6 +279,42 @@ def wait_for_mtp(timeout=10):
     return False
 
 
+def find_gvfs_mount():
+    """Find GVFS MTP mount for the TP-7, if any."""
+    try:
+        import glob
+        uid = os.getuid()
+        pattern = f"/run/user/{uid}/gvfs/mtp:host=*teenage_engineering*TP*7*"
+        matches = glob.glob(pattern)
+        if matches:
+            return matches[0]
+    except Exception:
+        pass
+    return None
+
+
+def unmount_gvfs():
+    """Unmount TP-7 GVFS/MTP mount if present."""
+    gvfs_path = find_gvfs_mount()
+    if not gvfs_path:
+        return False
+    try:
+        host = gvfs_path.split("mtp:host=")[-1]
+        uri = f"mtp://{host}/"
+        result = subprocess.run(
+            ["gio", "mount", "-u", uri],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            print("Unmounted GVFS MTP mount.")
+            return True
+        else:
+            print(f"GVFS unmount failed: {result.stderr.strip()}")
+    except FileNotFoundError:
+        pass  # gio not available
+    return False
+
+
 def mount_mtp(mountpoint):
     """Mount TP-7 MTP storage using jmtpfs."""
     os.makedirs(mountpoint, exist_ok=True)
@@ -338,6 +374,15 @@ def main():
         if mode != "mtp":
             print("Already in MIDI mode, nothing to do.")
             return
+        # Try GVFS unmount first — this often triggers the device to
+        # switch back to MIDI mode on its own
+        if unmount_gvfs():
+            time.sleep(2)
+            dev2, mode2 = find_tp7()
+            if mode2 == "midi" or not dev2:
+                print("TP-7 is back in MIDI mode.")
+                return
+            print("Device still in MTP mode, sending USB reset...")
         if switch_to_midi(dev):
             time.sleep(2)
             wait_for_midi()
@@ -364,7 +409,28 @@ def main():
         print("Use 'jmtpfs /mnt/tp7' to mount, or any MTP client to access files.")
         return
 
-    # Mount and copy
+    # Check if GVFS already mounted the device
+    gvfs_path = find_gvfs_mount()
+    if gvfs_path:
+        # Find the storage subdirectory (e.g. "TP-7 MTP Device")
+        try:
+            subdirs = os.listdir(gvfs_path)
+            if subdirs:
+                mountpoint = os.path.join(gvfs_path, subdirs[0])
+            else:
+                mountpoint = gvfs_path
+        except OSError:
+            mountpoint = gvfs_path
+        print(f"\nTP-7 already mounted by GVFS at: {mountpoint}")
+        if args.copy_to:
+            copy_recordings(mountpoint, args.copy_to)
+        else:
+            print(f"  Recordings: {mountpoint}/recordings/")
+            print(f"  Library:    {mountpoint}/library/")
+            print(f"\nRun 'gio mount -u mtp://<host>/' or use --disconnect to unmount.")
+        return
+
+    # Mount via jmtpfs
     mountpoint = args.mount or "/tmp/tp7_mtp"
     if mount_mtp(mountpoint):
         if args.copy_to:
