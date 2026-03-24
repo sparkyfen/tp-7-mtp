@@ -1,0 +1,9 @@
+# Teenage Engineering TP-7 - allow non-root USB access
+# Install: sudo cp 69-teenage-engineering.rules /etc/udev/rules.d/
+#          sudo udevadm control --reload-rules
+
+# TP-7 in MIDI mode
+SUBSYSTEM=="usb", ATTR{idVendor}=="2367", ATTR{idProduct}=="0019", MODE="0666", GROUP="plugdev"
+
+# TP-7 in MTP mode (same VID/PID, different descriptor)
+SUBSYSTEM=="usb", ATTR{idVendor}=="2367", ATTR{idProduct}=="0019", ENV{ID_MTP_DEVICE}="1", MODE="0666", GROUP="plugdev"

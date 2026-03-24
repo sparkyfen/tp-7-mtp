@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.o
+*.dylib
+*.log
+tp7_native_midi
+tp7_mode_b6_61
+tp7_switch_mtp
+libusb_shim.dylib
+FieldKit_local
+FieldKit_local.app/
+.DS_Store
