@@ -20,8 +20,30 @@ jobs:
       - name: Build .deb
         run: bash build-deb.sh "${GITHUB_REF_NAME#v}" "${{ matrix.codename }}"
 
-      - name: Upload .deb to release
+      - name: Upload .deb artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-${{ matrix.codename }}
+          path: build/*.deb
+
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all deb artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: debs/
+          merge-multiple: true
+
+      - name: Create release if needed and upload debs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "$GITHUB_REF_NAME" build/*.deb --clobber
+          gh release create "$GITHUB_REF_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes \
+            2>/dev/null || true
+          gh release upload "$GITHUB_REF_NAME" debs/*.deb \
+            --repo "$GITHUB_REPOSITORY" --clobber
