@@ -88,7 +88,7 @@ Payloads use standard MIDI 7-bit encoding: every 8 bytes consist of 1 MSB carrie
 ### Greet Response Payload (decoded)
 ```
 mode:normal;product:TP-7;sw_version:1.1.10;os_version:1.1.10;
-serial:TPBWX10V;sku:TE025AS002;base_sku:TE025AS001
+serial:TPXXX00X;sku:TE025AXXXX;base_sku:TE025AXXXX
 ```
 
 ---
@@ -119,7 +119,7 @@ Field Kit's actual flow (captured 2026-03-24):
 ```
 00:01:52.250  USBDeviceMonitor: Start monitoring
 00:01:52.253  USBProber: Has MIDI interface
-00:01:52.253  USBDeviceManager: add(device: TPBWX10V), mode: 1
+00:01:52.253  USBDeviceManager: add(device: TPXXX00X), mode: 1
 00:01:52.253  MIDIClient.send(request: greet, device: 34603008)
 00:01:52.254  MIDIClient.send(request: greet, device: 34603008) exclusive usb access, trying Core MIDI
 00:01:52.604  MIDIClient.send(request: greet, device: 34603008) finished with Core MIDI
@@ -131,9 +131,9 @@ Field Kit's actual flow (captured 2026-03-24):
 00:01:57.055  Connected to MTP
 00:01:57.358  deviceDisconnected (USB re-enumeration)
 00:01:58.077  USBProber: Has MTP interface
-00:01:58.077  add(device: TPBWX10V), mode: 0
+00:01:58.077  add(device: TPXXX00X), mode: 0
 00:01:58.083  NFSFileSystem: mount
-00:01:58.092  MTPService: open(serialNumber: TPBWX10V) succeeded
+00:01:58.092  MTPService: open(serialNumber: TPXXX00X) succeeded
 00:01:58.112  NFSFileSystem: mounted 0
 ```
 
