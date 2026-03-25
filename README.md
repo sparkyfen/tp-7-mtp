@@ -141,6 +141,10 @@ Status:   0x00=ok, 0x01=error, 0x02=cmdNotFound, 0x03=badRequest
 - Linux (tray app): `python3-gi`, `gir1.2-ayatanaappindicator3-0.1`, `python3-pyudev`
 - macOS: Xcode Command Line Tools (for C tool)
 
+## Disclaimer
+
+This project is **not affiliated with, endorsed by, or sponsored by Teenage Engineering AB**. "Teenage Engineering", "TP-7", and "Field Kit" are trademarks of Teenage Engineering AB. This is an independent reverse-engineering project for interoperability purposes under applicable law.
+
 ## License
 
-This is a reverse-engineering project for interoperability purposes. Use at your own risk.
+MIT License. See [LICENSE](LICENSE) for details.
