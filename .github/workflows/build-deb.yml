@@ -1,0 +1,24 @@
+name: Build .deb
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        codename: [noble, jammy]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build .deb
+        run: bash build-deb.sh "${GITHUB_REF_NAME#v}" "${{ matrix.codename }}"
+
+      - name: Upload .deb to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "$GITHUB_REF_NAME" build/*.deb --clobber

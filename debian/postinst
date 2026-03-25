@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+# Reload udev rules
+if [ -d /run/udev ]; then
+    udevadm control --reload-rules || true
+    udevadm trigger || true
+fi
+
+#DEBHELPER#

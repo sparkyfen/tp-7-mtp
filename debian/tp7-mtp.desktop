@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=TP-7 MTP
+Comment=Teenage Engineering TP-7 file transfer helper
+Exec=/usr/bin/tp7-tray
+Icon=tp7-mtp
+Terminal=false
+Type=Application
+Categories=Utility;Audio;
+Keywords=teenage;engineering;tp7;mtp;tape;recorder;

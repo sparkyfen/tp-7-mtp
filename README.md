@@ -4,7 +4,21 @@ Transfer recordings from a [Teenage Engineering TP-7](https://teenage.engineerin
 
 The TP-7 connects via USB as a MIDI/Audio device. To access files, it must be switched to MTP mode using a proprietary MIDI SysEx command. This tool handles the mode switch and file transfer.
 
-## Quick Start
+## Install (Debian/Ubuntu)
+
+```bash
+# Add the APT repository
+curl -fsSL https://sparkyfen.github.io/tp-7-mtp/pubkey.asc | sudo tee /etc/apt/keyrings/tp7-mtp.asc > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/tp7-mtp.asc] https://sparkyfen.github.io/tp-7-mtp $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/tp7-mtp.list
+sudo apt update
+
+# Install
+sudo apt install tp7-mtp
+```
+
+Then launch `tp7-tray` from your app menu, or use `tp7-mtp` on the command line.
+
+## Quick Start (from source)
 
 ### Linux (Tray App)
 
