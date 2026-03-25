@@ -50,7 +50,7 @@ jobs:
           done
           gpg --batch --export "$KEY_ID" > repo/pubkey.gpg
           gpg --batch --armor --export "$KEY_ID" > repo/pubkey.asc
-          touch repo/index.html
+          cp pages/index.html repo/index.html
 
       - name: Download debs from releases
         env:

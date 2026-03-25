@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP-7 MTP — APT Repository</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; background: #0d0d0d; color: #e0e0e0; line-height: 1.6; }
+    .container { max-width: 680px; margin: 0 auto; padding: 48px 24px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; color: #fff; }
+    .subtitle { color: #888; margin-bottom: 32px; font-size: 14px; }
+    .subtitle a { color: #888; }
+    h2 { font-size: 16px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 12px; }
+    pre { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+    code { font-family: "SF Mono", "Fira Code", "Consolas", monospace; }
+    p { margin-bottom: 12px; color: #bbb; font-size: 14px; }
+    a { color: #ff5722; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .badge { display: inline-block; background: #1a1a1a; border: 1px solid #333; border-radius: 4px; padding: 2px 8px; font-size: 12px; color: #888; margin-right: 4px; }
+    .disclaimer { margin-top: 48px; padding-top: 24px; border-top: 1px solid #222; color: #555; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>TP-7 MTP</h1>
+    <p class="subtitle">
+      Unofficial Linux file transfer tool for the
+      <a href="https://teenage.engineering/products/tp-7">Teenage Engineering TP-7</a>
+      &middot;
+      <a href="https://github.com/sparkyfen/tp-7-mtp">GitHub</a>
+    </p>
+
+    <h2>Install</h2>
+    <pre><code><span style="color:#888"># Add the APT repository</span>
+curl -fsSL https://sparkyfen.github.io/tp-7-mtp/pubkey.asc \
+  | sudo tee /etc/apt/keyrings/tp7-mtp.asc > /dev/null
+
+CODENAME=$(grep UBUNTU_CODENAME /etc/os-release | cut -d= -f2)
+
+echo "deb [signed-by=/etc/apt/keyrings/tp7-mtp.asc] \
+  https://sparkyfen.github.io/tp-7-mtp $CODENAME main" \
+  | sudo tee /etc/apt/sources.list.d/tp7-mtp.list
+
+<span style="color:#888"># Install</span>
+sudo apt update && sudo apt install tp7-mtp</code></pre>
+
+    <p>
+      <span class="badge">Ubuntu 24.04 (noble)</span>
+      <span class="badge">Ubuntu 22.04 (jammy)</span>
+      <span class="badge">Linux Mint 21/22</span>
+    </p>
+
+    <h2>Usage</h2>
+    <p>Launch <code>tp7-tray</code> from your app menu for the system tray helper, or use the CLI:</p>
+    <pre><code><span style="color:#888"># Switch to MTP mode and mount</span>
+sudo tp7-mtp --mount /mnt/tp7
+
+<span style="color:#888"># Copy your recordings</span>
+cp /mnt/tp7/recordings/*.wav ~/Music/
+
+<span style="color:#888"># Disconnect when done</span>
+sudo tp7-mtp --disconnect</code></pre>
+
+    <h2>How it works</h2>
+    <p>
+      The TP-7 connects as a USB MIDI/Audio device by default. This tool sends a
+      proprietary MIDI SysEx command (reverse-engineered from the official Field Kit
+      macOS app) to switch it into MTP file transfer mode, then mounts it as a
+      regular filesystem.
+    </p>
+
+    <h2>GPG Public Key</h2>
+    <p>
+      APT repository signed with:
+      <a href="pubkey.asc">pubkey.asc</a> &middot;
+      <a href="pubkey.gpg">pubkey.gpg</a>
+    </p>
+
+    <div class="disclaimer">
+      <p>
+        This project is not affiliated with, endorsed by, or sponsored by Teenage Engineering AB.
+        "Teenage Engineering", "TP-7", and "Field Kit" are trademarks of Teenage Engineering AB.
+      </p>
+      <p>MIT License &middot; <a href="https://github.com/sparkyfen/tp-7-mtp">Source on GitHub</a></p>
+    </div>
+  </div>
+</body>
+</html>
