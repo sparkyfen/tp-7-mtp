@@ -52,7 +52,8 @@ class TP7Tray:
         self.menu = Gtk.Menu()
         self.indicator.set_menu(self.menu)
 
-        # Initial device check
+        # Build initial menu and check device
+        self._build_menu()
         GLib.idle_add(self._update_once)
 
         # USB hotplug monitoring
